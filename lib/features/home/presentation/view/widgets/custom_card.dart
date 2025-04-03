@@ -1,10 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mypcot/core/utilities/constants/app_colors.dart';
 
-Widget buildOrdersCard() {
+Widget buildCustomCard() {
   return CarouselSlider.builder(
-    options: CarouselOptions(),
+    options: CarouselOptions(
+      viewportFraction: 1.0,
+      height: 250,
+    ),
     itemCount: 3,
     itemBuilder: (context, index, realIndex) {
       return Stack(
@@ -13,7 +17,7 @@ Widget buildOrdersCard() {
           Container(
             margin: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.blue[100],
+              color: AppColors.lightBlue,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -25,8 +29,8 @@ Widget buildOrdersCard() {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(
-                        'assets/icons/orders-illustration-image.svg', // You'll need to add this asset
-                        height: 100,
+                        'assets/icons/orders-illustration-image.svg',
+                        height: 120,
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 10),
@@ -34,7 +38,7 @@ Widget buildOrdersCard() {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.deepOrange,
+                          color: AppColors.orange,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
@@ -65,9 +69,9 @@ Widget buildOrdersCard() {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildOrderInfo(
+                  _buildCardInfo(
                       'You have 3 active\n orders from',
-                      Colors.deepOrange,
+                      AppColors.orange,
                       const [
                         'assets/images/card1.jpg',
                         'assets/images/card1.jpg',
@@ -80,14 +84,13 @@ Widget buildOrdersCard() {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: _buildOrderInfo(
-                        '02 pending\n orders from',
+                    child: _buildCardInfo(
+                        '02 pending\n Orders from',
                         textColor: Colors.black,
                         Colors.white,
                         const [
                           'assets/images/card1.jpg',
                           'assets/images/card1.jpg',
-                          'assets/images/card1.jpg'
                         ],
                         50,
                         100),
@@ -102,7 +105,7 @@ Widget buildOrdersCard() {
   );
 }
 
-Widget _buildOrderInfo(String text, Color bgColor, List<String> avatars,
+Widget _buildCardInfo(String text, Color bgColor, List<String> avatars,
     double height, double width,
     {Color? background, Color? textColor}) {
   return Stack(
@@ -116,15 +119,36 @@ Widget _buildOrderInfo(String text, Color bgColor, List<String> avatars,
           color: background ?? bgColor,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Text(
-          text,
+        child: RichText(
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: textColor ?? Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
+          text: TextSpan(
+            style: TextStyle(
+              color: textColor ?? Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 12, // Default font size
+            ),
+            children: text.split(' ').map((word) {
+              return TextSpan(
+                text: '$word ',
+                style: TextStyle(
+                  fontSize: word.contains(RegExp(r'\d+')) ? 16 : 12,
+                  fontWeight: word.contains(RegExp(r'\d+'))
+                      ? FontWeight.bold
+                      : FontWeight.w500,
+                ),
+              );
+            }).toList(),
           ),
         ),
+        // child: Text(
+        //   text,
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     color: textColor ?? Colors.white,
+        //     fontWeight: FontWeight.w500,
+        //     fontSize: 12,
+        //   ),
+        // ),
       ),
       Positioned(
         left: (width - (avatars.length * 25.0)) / 2,
@@ -137,10 +161,19 @@ Widget _buildOrderInfo(String text, Color bgColor, List<String> avatars,
               avatars.length,
               (index) => Positioned(
                 left: index * 26.0,
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.red,
-                  backgroundImage: AssetImage(avatars[index]),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.pink,
+                      width: 2,
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 18,
+                    // backgroundColor: Colors.red,
+                    backgroundImage: AssetImage(avatars[index]),
+                  ),
                 ),
               ),
             ),

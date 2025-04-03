@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mypcot/core/utilities/constants/app_colors.dart';
-import 'package:mypcot/features/home/presentation/view/widgets/order_card.dart';
+import 'package:mypcot/features/home/presentation/view/bottom_nav_bar.dart';
+import 'package:mypcot/features/home/presentation/view/widgets/custom_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,7 +31,7 @@ class HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -65,16 +66,57 @@ class HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
           ),
           IconButton(
-            icon: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: SvgPicture.asset(
-                "assets/icons/Group 917.svg",
-                width: 20,
-                height: 20,
-              ),
+            icon: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: SvgPicture.asset(
+                    "assets/icons/Group 917.svg",
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: -.5,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "2",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             onPressed: () {},
           ),
+          // IconButton(
+          //   icon: CircleAvatar(
+          //     backgroundColor: Colors.white,
+          //     child: SvgPicture.asset(
+          //       "assets/icons/Group 917.svg",
+          //       width: 20,
+          //       height: 20,
+          //     ),
+          //   ),
+          //   onPressed: () {},
+          // ),
           IconButton(
             icon: Container(
               padding: EdgeInsets.all(8),
@@ -83,9 +125,9 @@ class HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: SvgPicture.asset(
-                "3.svg",
-                width: 24,
-                height: 24,
+                "assets/icons/Group 917.svg",
+                width: 20,
+                height: 20,
               ),
             ),
             onPressed: () {},
@@ -127,30 +169,7 @@ class HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              buildOrdersCard(),
-
-              // SLIDER
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Container(
-              //         height: 220,
-              //         width: 320,
-              //         padding: EdgeInsets.all(16),
-              //         decoration: BoxDecoration(
-              //           color: Colors.blue[200],
-              //           borderRadius: BorderRadius.circular(20),
-              //         ),
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             // Carousel slider
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
+              buildCustomCard(),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -302,52 +321,36 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Group 910.svg",
-              width: 24,
-              height: 24,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Group 912.svg",
-              width: 24,
-              height: 24,
-            ),
-            label: 'Customers',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Group 913.svg",
-              width: 24,
-              height: 24,
-            ),
-            label: 'Khata',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Group 914.svg",
-              width: 24,
-              height: 24,
-            ),
-            label: 'Orders',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        selectedItemColor: AppColors.fontColor,
-        unselectedItemColor: AppColors.fontColor.withOpacity(0.5),
-        onTap: _onItemTapped,
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: onItemTapped,
       ),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: const CircularNotchedRectangle(),
+      //   notchMargin: 8,
+      //   child: SizedBox(
+      //     height: 60,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //       children: [
+      //         _buildNavItem("assets/icons/Group 910.svg", 'Home', 0),
+      //         _buildNavItem("assets/icons/Group 912.svg", 'Customers', 1),
+      //         const SizedBox(width: 40), // Space for FAB
+      //         _buildNavItem("assets/icons/Group 913.svg", 'Khata', 2),
+      //         _buildNavItem("assets/icons/Group 914.svg", 'Orders', 3),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         backgroundColor: AppColors.darkBlue,
-        child: Icon(Icons.add, size: 30, color: Colors.white),
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.white,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -379,4 +382,42 @@ class HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
+  // Widget buildNavItem(String assetPath, String label, int index) {
+  //   final bool isSelected = _selectedIndex == index;
+  //   return Expanded(
+  //     child: InkWell(
+  //       onTap: () {
+  //         setState(() {
+  //           _selectedIndex = index;
+  //         });
+  //       },
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           SvgPicture.asset(
+  //             assetPath,
+  //             width: 24,
+  //             height: 24,
+  //             colorFilter: ColorFilter.mode(
+  //               isSelected
+  //                   ? AppColors.fontColor
+  //                   : AppColors.fontColor.withOpacity(0.5),
+  //               BlendMode.srcIn,
+  //             ),
+  //           ),
+  //           Text(
+  //             label,
+  //             style: TextStyle(
+  //               color: isSelected
+  //                   ? AppColors.fontColor
+  //                   : AppColors.fontColor.withOpacity(0.5),
+  //               fontSize: 12,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
